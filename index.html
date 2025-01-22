@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>音楽楽譜生成ゲーム</title>
+    <!-- フォントを変更 -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <!-- アイコンフォントを追加 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- サイドバー -->
+    <div id="sidebar">
+        <div id="button-area">
+            <button id="start-button"><i class="fas fa-play"></i> スタート</button>
+            <button id="stop-button"><i class="fas fa-stop"></i> ストップ</button>
+            <button id="play-pause-button"><i class="fas fa-music"></i> 再生/一時停止</button>
+            <button id="delete-button"><i class="fas fa-trash"></i> 削除</button>
+        </div>
+        <!-- 調合選択エリア -->
+        <div id="key-signature-area">
+            <label for="key-signature-select">調合を選択:</label>
+            <select id="key-signature-select">
+                <option value="Cメジャー">Cメジャー</option>
+                <option value="Dbメジャー">Dbメジャー</option>
+                <option value="Dメジャー">Dメジャー</option>
+                <option value="Ebメジャー">Ebメジャー</option>
+                <option value="Eメジャー">Eメジャー</option>
+                <option value="Fメジャー">Fメジャー</option>
+                <option value="Gbメジャー">Gbメジャー</option>
+                <option value="Gメジャー">Gメジャー</option>
+                <option value="Abメジャー">Abメジャー</option>
+                <option value="Aメジャー">Aメジャー</option>
+                <option value="Bbメジャー">Bbメジャー</option>
+                <option value="Bメジャー">Bメジャー</option>
+                <option value="無調">無調</option>
+            </select>
+        </div>
+        <!-- 拍子選択エリア -->
+        <div id="time-signature-area">
+            <label>拍子を選択:</label>
+            <div class="time-signature-buttons">
+                <button class="time-signature-button" data-time="4/4">
+                    <img src="4_4.png" alt="4/4" class="time-signature-icon">
+                </button>
+                <button class="time-signature-button" data-time="3/4">
+                    <img src="3_4.png" alt="3/4" class="time-signature-icon">
+                </button>
+                <button class="time-signature-button" data-time="6/8">
+                    <img src="6_8.png" alt="6/8" class="time-signature-icon">
+                </button>
+            </div>
+        </div>
+        <!-- 設定ボタンの追加 -->
+        <div id="settings-button-area">
+            <button id="settings-button"><i class="fas fa-cog"></i> 使い方・設定</button>
+        </div>
+    </div>
+
+
+
+    <!-- 設定モーダル -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>使い方・設定</h2>
+
+
+            <!-- 使い方 -->
+            <div class="settings-section">
+                <h3>使い方</h3>
+                <!-- 使い方の説明をここに追加できます -->
+                <p>このゲームは、降ってくるオブジェクトをタップして楽譜を作っていくゲームだよ。
+                    音符の種類は四分音符、二分音符、八分音符、十六分音符、付点四分音符、付点八分音符、四分休符、八分休符、十六分休符があり、音符と休符の中でランダムで決まるよ。
+                    ぽちぽち押して作曲しちゃおう</p>
+
+
+            </div>
+
+            <!-- 音の種類 -->
+            <div class="settings-section">
+                <h3>音の種類</h3>
+                <label><input type="radio" name="sound-set" value="new" checked> 継続音</label>
+                <label><input type="radio" name="sound-set" value="retro"> レトロ音</label>
+                <label><input type="radio" name="sound-set" value="classic"> クラシック音</label>
+                <label><input type="radio" name="sound-set" value="electro"> エレクトロ音</label>
+                <label><input type="radio" name="sound-set" value="jazz"> ジャズ音</label>
+            </div>
+
+            <!-- 降下速度 -->
+            <div class="settings-section">
+                <h3>降下速度</h3>
+                <input type="range" id="speed-slider" min="1" max="10" value="5">
+                <label for="speed-slider">速度: <span id="speed-value">5</span></label>
+                <p>ゆっくりーーーーーはやい</p>
+            </div>
+            <h3>背景画像</h3>
+            <div class="background-selection">
+                <img src="秋空.webp" alt="秋空" class="background-thumbnail" data-bg="秋空.webp">
+                <img src="湖.webp" alt="湖" class="background-thumbnail" data-bg="湖.webp">
+                <img src="森.webp" alt="森" class="background-thumbnail" data-bg="森.webp">
+                <img src="桜.webp" alt="桜" class="background-thumbnail" data-bg="桜.webp">
+                <img src="都会.webp" alt="都会" class="background-thumbnail" data-bg="都会.webp">
+                <img src="夜明け.webp" alt="夜明け" class="background-thumbnail" data-bg="夜明け.webp">
+            </div>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div id="main-content">
+        <div id="game-area"></div>
+        <div id="score-area">
+            <!-- ト音記号 -->
+            <img id="clef-image" src="ト音記号.png" alt="ト音記号" class="clef">
+
+            <!-- 拍子画像を追加 -->
+            <img id="time-signature-image" src="4_4.png" alt="拍子" class="time-signature">
+
+            <!-- 最初の五線譜 -->
+            <img id="staff-image-1" src="五線譜.png" alt="五線譜1" class="staff">
+            <!-- 二つ目の五線譜を追加 -->
+            <img id="staff-image-2" src="五線譜2.png" alt="五線譜2" class="staff">
+            <div id="notes-container"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

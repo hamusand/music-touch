@@ -1,0 +1,486 @@
+/* style.css */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Orbitron', sans-serif;
+    background-color: #0d0d0d;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* サイドバーのスタイル */
+#sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 220px;
+    height: 100%;
+    background-color: #2c3e50;
+    overflow-y: auto; /* 縦方向のスクロールを可能に */
+    z-index: 1000;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    padding-bottom: 20px; /* 下部に余白を追加 */
+
+    /* flexboxの設定を追加 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* ボタンエリアのスタイル */
+#button-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+#button-area button {
+    font-size: 1em;
+    margin: 15px 0;
+    padding: 15px 20px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 80%;
+    transition: background-color 0.3s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#button-area button i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+#button-area button:hover {
+    background-color: #c0392b;
+}
+
+#button-area button:active {
+    transform: translateY(2px);
+}
+
+/* 調合選択エリアのスタイル */
+#key-signature-area {
+    margin-top: 30px;
+    text-align: center;
+    color: #ecf0f1;
+    padding: 0 10px;
+}
+
+#key-signature-area label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+#key-signature-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 5px;
+    border: none;
+    background-color: #34495e;
+    color: #ecf0f1;
+    cursor: pointer;
+}
+
+/* 設定ボタンのスタイル */
+#settings-button-area {
+    width: 100%;
+    text-align: center;
+    /* 追加: flexboxの子要素なので、上部と下部が分離されている */
+}
+
+#settings-button {
+    font-size: 1em;
+    margin: 10px 0;
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 80%;
+    transition: background-color 0.3s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#settings-button i {
+    margin-right: 10px;
+    font-size: 1.2em;
+}
+
+#settings-button:hover {
+    background-color: #2980b9;
+}
+
+#settings-button:active {
+    transform: translateY(2px);
+}
+
+/* 設定モーダルのスタイル */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #2c3e50;
+    margin: 5% auto; /* 5% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    border-radius: 10px;
+    color: #ecf0f1;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* 音の種類セクションのスタイル */
+.sound-selection {
+    margin-bottom: 20px;
+}
+
+.sound-selection label {
+    display: block;
+    margin: 10px 0;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+/* 背景画像セクションのスタイル */
+.background-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center; /* 中央揃え */
+}
+
+.background-thumbnail {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid #34495e;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.3s;
+}
+
+.background-thumbnail:hover {
+    border-color: #1abc9c;
+    transform: scale(1.05);
+}
+
+.background-thumbnail.selected {
+    border-color: #e74c3c;
+    transform: scale(1.1);
+}
+
+/* メインコンテンツのスタイル */
+#main-content {
+    margin-left: 220px; /* サイドバーの幅に合わせて調整 */
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#game-area {
+    position: relative;
+    flex: 7;
+    background-image: url('夜明け.webp'); /* 初期背景画像をDALL·Eに変更 */
+    background-size: cover;
+    background-position: center;
+    opacity: 0.8;
+    overflow: hidden;
+}
+
+/* スコアエリアの幅を拡張 */
+#score-area {
+    position: relative;
+    flex: 3;
+    background-color: #f0f0f0;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    border-top: 2px solid #ccc;
+    height: 100%; /* ゲームエリアと同じ縦幅に合わせる */
+    width: calc(800px * 2); /* 五線譜の幅（800px）×2 */
+}
+
+/* 五線譜画像のスタイル */
+.staff {
+    position: absolute;
+    top: 0;
+    width: auto;
+    height: 100%;
+}
+
+/* 二つ目の五線譜画像の位置を設定 */
+#staff-image-2 {
+    left: 100%; /* 五線譜1.pngの右側に配置 */
+    height: 100%; /* ゲームエリアの縦幅に合わせる */
+}
+
+/* notes-containerのスタイル */
+#notes-container {
+    position: relative; /* 追加 */
+    height: 100%; /* 高さを100%に設定 */
+}
+
+/* 音符コンテナのスタイル */
+.note-container {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 255px; /* サイズを1.7倍に変更 */
+    height: 255px;
+    z-index: 10; /* 重なり順を調整 */
+}
+
+/* 音符画像のスタイル */
+.note-container .note {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 5; /* 画像の重なり順を調整 */
+}
+
+/* シャープ・フラット画像のスタイル */
+.accidental-sharp, .accidental-flat {
+    width: 234px; /* サイズを2.6倍に変更 */
+    height: 234px;
+    object-fit: contain;
+    position: absolute;
+    left: -15px; /* 音符画像の左側に配置（必要に応じて調整） */
+    /* topはJavaScriptで設定 */
+    z-index: 15; /* シャープ・フラットを音符画像より前面に表示 */
+}
+
+/* 例: シャープの位置調整 */
+.accidental-sharp {
+    left: -15%; /* 音符画像の右側に配置 */
+    top: 10%;  /* 音符画像の上部に配置 */
+}
+
+/* 例: フラットの位置調整 */
+.accidental-flat {
+    left: -15%; /* 音符画像の右側に配置 */
+    top: 10%;  /* 音符画像の上部に配置 */
+}
+
+/* 落下する音符のスタイル */
+.circle-note {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%; /* 円形にするためのプロパティ */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1.2em;
+    text-shadow: 1px 1px 2px #000;
+    font-family: 'Orbitron', sans-serif;
+    box-shadow: inset -5px -5px 15px rgba(255,255,255,0.1), inset 5px 5px 15px rgba(0,0,0,0.5);
+    /* 光沢感のある背景はJavaScriptで設定 */
+    animation: fall linear paused;
+}
+
+/* 落下アニメーションの設定 */
+.circle-note.falling {
+    animation-play-state: running;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+    }
+}
+
+/* クリック時のアニメーション */
+.circle-note.clicked {
+    animation: pop 0.2s forwards;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+/* 揺れるアニメーション */
+.circle-note.shake {
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+/* 設定モーダルの追加スタイル */
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-content h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.sound-selection {
+    margin-bottom: 20px;
+}
+
+.sound-selection label {
+    display: block;
+    margin: 10px 0;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.background-selection {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center; /* 中央揃え */
+}
+
+.background-thumbnail {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border: 2px solid #34495e;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.3s, transform 0.3s;
+}
+
+.background-thumbnail:hover {
+    border-color: #1abc9c;
+    transform: scale(1.05);
+}
+
+.background-thumbnail.selected {
+    border-color: #e74c3c;
+    transform: scale(1.1);
+}
+/* ト音記号のスタイル */
+.clef {
+    position: absolute;
+    left: 20px; /* 左からの位置を調整 */
+    top: 0;
+    width: 50px;
+    height: auto;
+}
+
+/* 拍子画像のスタイル */
+.time-signature {
+    position: absolute;
+    left: 80px; /* ト音記号の右側に配置 */
+    top: -1px; 
+    width: 84px; /* 幅を2.8倍に増加（30px * 2.8） */
+    height: auto;
+}
+
+/* notes-container の位置を調整 */
+#notes-container {
+    position: relative;
+    height: 100%;
+    margin-left: 120px; 
+}
+
+/* 拍子選択エリアのスタイル */
+#time-signature-area {
+    margin-top: 20px;
+    text-align: center;
+    color: #ecf0f1;
+    padding: 0 10px;
+}
+
+#time-signature-area label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.time-signature-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.time-signature-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.time-signature-icon {
+    width: 40px; /* サイズを小さくしてアイコン風に */
+    height: auto;
+    transition: transform 0.2s;
+}
+
+.time-signature-button:hover .time-signature-icon {
+    transform: scale(1.1);
+}
+
+.time-signature-button.selected .time-signature-icon {
+    outline: 2px solid #e74c3c; /* borderからoutlineに変更 */
+    border-radius: 5px;
+}
+
+/* 小節線のスタイルを調整 */
+.measure-line {
+    position: absolute;
+    height: 100%; /* 高さを50%に設定（必要に応じて調整） */
+    width: auto;
+}
+
+.note-container {
+    position: relative;
+    /* その他のスタイル */
+}
