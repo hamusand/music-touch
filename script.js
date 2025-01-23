@@ -150,35 +150,35 @@ updateTimeSignature(initialTimeSignature);
 
 // 音階ごとの色を設定（共感覚に合わせて修正）
 const noteColors = {
-    'C': '#DC2D26',    // 赤
-    'C#': '#A92432',   // 明るい赤
-    'Db': '#E5A83A',
-    'D': '#E1CE33',    // オレンジ
-    'D#': '#84A54B',   // ゴールド
-    'Eb': '#11753E',
-    'E': '#3A9E38',    // 黄色
-    'F': '#B07940',    // 黄緑
-    'F#': '#C9572C',   // 緑
-    'Gb': '#1F6F92',
-    'G': '#4CB7D4',    // シアン
-    'G#': '#5296BA',   // 水色
-    'Ab': '#593278',
-    'A': '#AF4F79',    // 青
-    'A#': '#86608C',   // 青紫
-    'Bb': '#986996',
-    'B': '#D19DA8',    // 紫
-    'C2': '#DC2D26',   // 赤（オクターブ上）
-    'C#2': '#A92432',
-    'Db2': '#E5A83A',
-    'D2': '#E1CE33',
-    'D#2': '#84A54B',
-    'Eb2': '#11753E',
-    'E2': '#3A9E38',
-    'F2': '#B07940',
-    'F#2': '#C9572C',
-    'Gb2': '#1F6F92',
-    'G2': '#4CB7D4',
-    'G#2': '#5296BA'
+    'C': '#FF0000',
+    'C#': '#FF7F00',
+    'Db': '#FF7F00',
+    'D': '#FFFF00',
+    'D#': '#7FFF00',
+    'Eb': '#7FFF00',
+    'E': '#00FF00',
+    'F': '#00FF7F',
+    'F#': '#00FFFF',
+    'Gb': '#00FFFF',
+    'G': '#007FFF',
+    'G#': '#0000FF',
+    'Ab': '#0000FF',
+    'A': '#7F00FF',
+    'A#': '#FF00FF',
+    'Bb': '#FF00FF',
+    'B': '#FF007F',
+    'C2': '#FF0000',
+    'C#2': '#FF7F00',
+    'Db2': '#FF7F00',
+    'D2': '#FFFF00',
+    'D#2': '#7FFF00',
+    'Eb2': '#7FFF00',
+    'E2': '#00FF00',
+    'F2': '#00FF7F',
+    'F#2': '#00FFFF',
+    'Gb2': '#00FFFF',
+    'G2': '#007FFF',
+    'G#2': '#0000FF'
 };
 
 // 音セットの定義
@@ -841,6 +841,14 @@ function pausePlayback() {
 // キーボード入力で音符を追加するイベントリスナー
 document.addEventListener('keydown', (event) => {
     const key = event.key.toLowerCase();
+
+    // 1. スペースキーによる再生/一時停止の追加
+    if (key === ' ') {
+       // スペースキーが押されたら、再生/一時停止をトグル
+        event.preventDefault(); // ページのスクロールなどを防ぐ
+        togglePlayPause();
+        return;
+    }
     // フォーカスがボタンや入力フィールドにある場合は無視
     if (['input', 'textarea', 'button'].includes(event.target.tagName.toLowerCase())) {
         return;
