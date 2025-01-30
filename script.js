@@ -8,6 +8,7 @@ let scoreNotes = [];
 let isPlaying = false;
 let playbackIndex = 0;
 let playbackTimeout;
+let useSolfegeNotation = false;
 
 // 最大同時表示音符数を設定
 const MAX_NOTES_ON_SCREEN = 20;
@@ -44,7 +45,38 @@ const notesData = [
     { name: 'G2', frequency: 783.99 , key: '.' },
     { name: 'G#2', frequency: 830.61 , key: '/' }
 ];
-
+const solfegeMap = {
+    'C': 'ド',
+    'C#': 'ド#',
+    'Db': 'ド♭',
+    'D': 'レ',
+    'D#': 'レ#',
+    'Eb': 'ミ♭',
+    'E': 'ミ',
+    'F': 'ファ',
+    'F#': 'ファ#',
+    'Gb': 'ファ♭',
+    'G': 'ソ',
+    'G#': 'ソ#',
+    'Ab': 'ラ♭',
+    'A': 'ラ',
+    'A#': 'ラ#',
+    'Bb': 'シ♭',
+    'B': 'シ',
+    'C2': 'ド(高)',
+    'C#2': 'ド#(高)',
+    'Db2': 'ド♭(高)',
+    'D2': 'レ(高)',
+    'D#2': 'レ#(高)',
+    'Eb2': 'ミ♭(高)',
+    'E2': 'ミ(高)',
+    'F2': 'ファ(高)',
+    'F#2': 'ファ#(高)',
+    'Gb2': 'ファ♭(高)',
+    'G2': 'ソ(高)',
+    'G#2': 'ソ#(高)'
+    // 必要に応じてさらに追加 or 修正
+};
 // 調合ごとの音階リスト
 const keySignatures = {
     "Cメジャー": ['C', 'D', 'E', 'F', 'G', 'A', 'B', 'C2', 'D2', 'E2', 'F2', 'G2'],
@@ -147,6 +179,20 @@ timeSignatureButtons.forEach(button => {
 timeSignatureButtons[0].classList.add('selected');
 const initialTimeSignature = timeSignatureButtons[0].getAttribute('data-time');
 updateTimeSignature(initialTimeSignature);
+
+
+// 音の種類セクションと同様、音名表記切り替えラジオボタンにイベントを付与
+const notationSwitchRadios = document.querySelectorAll('input[name="notation-switch"]');
+notationSwitchRadios.forEach(radio => {
+    radio.addEventListener('change', () => {
+        if (radio.value === 'solfege') {
+            useSolfegeNotation = true;
+        } else {
+            useSolfegeNotation = false;
+        }
+        console.log(`Notation switched to: ${useSolfegeNotation ? 'ドレミ' : '英語'}`);
+    });
+});
 
 // 音階ごとの色を設定（共感覚に合わせて修正）
 const noteColors = {
@@ -460,6 +506,9 @@ function createFallingNote() {
 
     // 音符名をテキストで表示
     noteContainer.textContent = isRestNote ? '休' : note.name; // 休符の場合は '休' と表示
+    if (!isRestNote && useSolfegeNotation && solfegeMap[note.name]) {
+        noteContainer.textContent = solfegeMap[note.name];
+   }
     noteContainer.style.fontSize = '1.2em';
     noteContainer.style.color = '#FFFFFF';
 
@@ -849,6 +898,12 @@ document.addEventListener('keydown', (event) => {
         togglePlayPause();
         return;
     }
+    if (key === 'delete' || key === 'backspace') {
+        event.preventDefault(); // 画面スクロールなどの既定動作を防ぐ
+        removeLastNote();
+        return; // 処理終了
+        }
+    
     // フォーカスがボタンや入力フィールドにある場合は無視
     if (['input', 'textarea', 'button'].includes(event.target.tagName.toLowerCase())) {
         return;
@@ -884,4 +939,57 @@ function getNoteImage(noteName, durationName, durationImage) {
     }
 
     return imageName;
+}
+// script.js の下部あたりに追加してください
+
+/**
+ * 直前に追加された音符（scoreNotesの最後の要素）を取り消す関数
+ * キーボードのDeleteキーまたはBackspaceキーが押されたら呼び出す
+ */
+function removeLastNote() {
+    if (scoreNotes.length === 0) {
+        return; // 何も音符が無い場合は処理しない
+    }
+
+    // 最後に追加された音符（または休符）
+    const lastNoteData = scoreNotes.pop();
+
+    // 音符の要素を削除
+    if (lastNoteData.element) {
+        lastNoteData.element.remove();
+    }
+
+    // 音符の重みを小節の重みに戻す
+    const weight = noteWeights[lastNoteData.duration.name];
+    currentMeasureWeight -= weight;
+
+    // もし currentMeasureWeight が負になったら、小節線も引き直しが必要
+    // 例: 小節がちょうど終わって線を描画した後に、その音符を取り消す場合
+    if (currentMeasureWeight < 0) {
+        // 小節1つ分戻す
+        currentMeasureWeight += measureTotal;
+
+        // 小節線が引かれている場合は消す（最後に描画された線を削除）
+        const measureLines = document.querySelectorAll('.measure-line');
+        if (measureLines.length > 0) {
+            measureLines[measureLines.length - 1].remove();
+        }
+    }
+
+    // 描画幅 (window.currentScoreWidth) の再計算
+    // もっと正確に行う場合は、今あるscoreNotes全体を再配置し直すほうが確実
+    // 簡易的には下記のように最後の note を取り除いた位置に戻す
+    if (scoreNotes.length === 0) {
+        // 全部無くなった場合は初期化
+        window.currentScoreWidth = 20;
+    } else {
+        // 残っている最後の音符の位置 + 音符幅を計算
+        const newLastNote = scoreNotes[scoreNotes.length - 1];
+        const lastNoteElement = newLastNote.element;
+        const lastNoteLeft = parseFloat(lastNoteElement.style.left) || 20;
+        const lastNoteWidth = lastNoteElement.offsetWidth || 255;
+        window.currentScoreWidth = lastNoteLeft + lastNoteWidth;
+    }
+
+    console.log('Removed last note.');
 }

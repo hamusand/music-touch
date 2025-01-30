@@ -21,7 +21,7 @@
         </div>
         <!-- 調合選択エリア -->
         <div id="key-signature-area">
-            <label for="key-signature-select">調合を選択:</label>
+            <label for="key-signature-select">調号を選択:</label>
             <select id="key-signature-select">
                 <option value="Cメジャー">Cメジャー</option>
                 <option value="Dbメジャー">Dbメジャー</option>
@@ -96,6 +96,13 @@
                 <label for="speed-slider">速度: <span id="speed-value">5</span></label>
                 <p>ゆっくりーーーーーはやい</p>
             </div>
+            <div class="settings-section">
+                <h3>音名表記切り替え</h3>
+                <label><input type="radio" name="notation-switch" value="english" checked> C, D, E,...表記</label>
+                <label><input type="radio" name="notation-switch" value="solfege"> ド, レ, ミ,...表記</label>
+            </div>
+
+            
             <h3>背景画像</h3>
             <div class="background-selection">
                 <img src="秋空.webp" alt="秋空" class="background-thumbnail" data-bg="秋空.webp">
