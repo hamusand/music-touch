@@ -642,7 +642,7 @@ function addNoteToScore(note, duration, isRest) {
     if (hasAccidental) {
         accidentalImg = document.createElement('img');
         if (note.name.includes('#')) {
-            accidentalImg.src = 'シャープ.png';
+            accidentalImg.src = 'シャープ.png';
             accidentalImg.classList.add('accidental-sharp');
             accidentalImg.alt = 'シャープ';
         } else {
